@@ -5,6 +5,10 @@ load_dotenv()
 from flask import Flask
 from api.utils import db, migrate
 
+# for initial migration only
+from api.models.user import UserModel
+from api.models.post import PostModel
+
 def init_app():
   app = Flask(__name__)
 
