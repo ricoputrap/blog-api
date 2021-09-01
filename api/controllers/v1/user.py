@@ -38,4 +38,13 @@ class User(Resource):
         }
       return response
     except Exception as e:
-      pass
+      return make_response(jsonify({
+        'errors': [
+          {
+            "status": 500,
+            "source": { "pointer": "/profile/", "method": "GET" },
+            "title": "Internal Server Error",
+            "detail": str(e)
+          }
+        ]
+      }), 500)
