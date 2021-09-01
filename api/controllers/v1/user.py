@@ -1,4 +1,4 @@
-from flask import make_response, jsonify
+from flask import make_response, jsonify, request
 from flask_restful import Resource
 from api.services.user import UserService
 from api.serializers.user import UserSchema
@@ -43,6 +43,27 @@ class User(Resource):
           {
             "status": 500,
             "source": { "pointer": "/profile/", "method": "GET" },
+            "title": "Internal Server Error",
+            "detail": str(e)
+          }
+        ]
+      }), 500)
+  
+  def post(self):
+    try:
+      request_body = request.get_json()
+      new_user = self.user_service.create_new_user(request_body)
+      response = {
+        'data': self.user_schema.dump(new_user),
+        'message': 'New user is successfully created!'
+      }
+      return response
+    except Exception as e:
+      return make_response(jsonify({
+        'errors': [
+          {
+            "status": 500,
+            "source": { "pointer": "/profile/", "method": "POST" },
             "title": "Internal Server Error",
             "detail": str(e)
           }
