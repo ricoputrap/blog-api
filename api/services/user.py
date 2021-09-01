@@ -32,3 +32,18 @@ class UserService:
     db.session.add(new_user)
     db.session.commit()
     return new_user
+  
+  def edit_user(self, u_id, request_body):
+    user = UserModel.query.filter_by(u_id=u_id).first()
+    if not user:
+      return None
+    
+    if 'u_email' in request_body:
+      user.u_email = request_body['u_email']
+    if 'u_fullname' in request_body:
+      user.u_fullname = request_body['u_fullname']
+    if 'u_occupation' in request_body:
+      user.u_occupation = request_body['u_occupation']
+    
+    db.session.commit()
+    return user
