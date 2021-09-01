@@ -14,8 +14,11 @@ class User(Resource):
       if u_id == None:
         users = self.user_service.get_all_users()
         response = {
-          'data': self.user_list_schema.dump(users),
-          'total': len(users)
+          'message': "Get all registered users is success!",
+          'data': {
+            'users': self.user_list_schema.dump(users),
+            'total': len(users)
+          }
         }
       else:
         user = self.user_service.get_user_by_id(u_id)
@@ -34,7 +37,10 @@ class User(Resource):
           }), 404)
         
         response = {
-          'data': self.user_schema.dump(user)
+          'message': 'Get user by u_id is success!',
+          'data': {
+            'user': self.user_schema.dump(user),
+          }
         }
       return response
     except Exception as e:
@@ -54,7 +60,10 @@ class User(Resource):
       request_body = request.get_json()
       new_user = self.user_service.create_new_user(request_body)
       response = {
-        'data': self.user_schema.dump(new_user),
+        'data': {
+          'user': self.user_schema.dump(new_user),
+          'token': 'dummytoken1234'
+        },
         'message': 'New user is successfully created!'
       }
       return response
