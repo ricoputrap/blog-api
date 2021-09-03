@@ -16,6 +16,7 @@ def init_app():
   api = Api(app)
 
   app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+  app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
   
   db.init_app(app)
   ma.init_app(app)

@@ -70,7 +70,28 @@ class User(Resource):
         }
         return response
       elif path == '/login/':
-        return ""
+        request_body = request.get_json()
+        result = self.user_service.login(request_body)
+        if not result:
+          return make_response(jsonify({
+            'errors': [
+              {
+                "status": 401,
+                "source": { "pointer": "/login/", "method": "POST" },
+                "title": "Unauthorized",
+                "detail": "Wrong username or password."
+              }
+            ]
+          }), 401)
+        
+        response = {
+          "message": "Login successful.",
+          "data": {
+            "user": self.user_schema.dump(result['user']),
+            "token": result['token']
+          }
+        }
+        return response
       else:
         return make_response(jsonify({
         'errors': [

@@ -1,7 +1,13 @@
-from werkzeug.security import generate_password_hash
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+from werkzeug.security import check_password_hash, generate_password_hash
 from api.models.user import UserModel
 from api.utils import db
 import uuid
+import jwt
+import datetime
 
 class UserService:
 
@@ -47,3 +53,25 @@ class UserService:
     
     db.session.commit()
     return user
+
+  def login(self, request_body):
+    # get the user by username
+    user = UserModel.query.filter_by(u_username=request_body['u_username']).first()
+    if not user:
+      return None
+
+    if check_password_hash(user.u_password, request_body["u_password"]):
+      # prepare jwt token
+      jwt_payload = {
+        "u_id": user.u_id,
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30)
+      }
+      jwt_secret_key = os.getenv('SECRET_KEY')
+      jwt_token = jwt.encode(jwt_payload, jwt_secret_key)
+      
+      return {
+        "token": jwt_token,
+        "user": user
+      }
+
+    return None
