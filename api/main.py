@@ -1,3 +1,4 @@
+from api.middleware import AuthMiddleware
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -25,5 +26,7 @@ def init_app():
   api.add_resource(User, "/profile/", "/profile/<u_id>")
   app.add_url_rule("/register/", endpoint="user", methods=["POST"])
   app.add_url_rule("/login/", endpoint="user", methods=["POST"])
+
+  app.wsgi_app = AuthMiddleware(app.wsgi_app)
 
   return app
