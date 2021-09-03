@@ -56,23 +56,38 @@ class User(Resource):
       }), 500)
   
   def post(self):
+    path = request.path
     try:
-      request_body = request.get_json()
-      new_user = self.user_service.create_new_user(request_body)
-      response = {
-        'data': {
-          'user': self.user_schema.dump(new_user),
-          'token': 'dummytoken1234'
-        },
-        'message': 'New user is successfully created!'
-      }
-      return response
+      if path == '/register/':
+        request_body = request.get_json()
+        new_user = self.user_service.create_new_user(request_body)
+        response = {
+          'data': {
+            'user': self.user_schema.dump(new_user),
+            # 'token': 'dummytoken1234'
+          },
+          'message': 'New user is successfully created!'
+        }
+        return response
+      elif path == '/login/':
+        return ""
+      else:
+        return make_response(jsonify({
+        'errors': [
+          {
+            "status": 404,
+            "source": { "pointer": "/profile/", "method": "POST" },
+            "title": "Internal Server Error",
+            "detail": "Accessible only through /register and /login endpoint"
+          }
+        ]
+      }), 404)
     except Exception as e:
       return make_response(jsonify({
         'errors': [
           {
             "status": 500,
-            "source": { "pointer": "/profile/", "method": "POST" },
+            "source": { "pointer": "%s" % (path), "method": "POST" },
             "title": "Internal Server Error",
             "detail": str(e)
           }

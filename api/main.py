@@ -22,5 +22,7 @@ def init_app():
   migrate.init_app(app, db)
 
   api.add_resource(User, "/profile/", "/profile/<u_id>")
+  app.add_url_rule("/register/", endpoint="user", methods=["POST"])
+  app.add_url_rule("/login/", endpoint="user", methods=["POST"])
 
   return app
