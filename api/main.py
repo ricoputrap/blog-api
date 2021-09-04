@@ -7,10 +7,8 @@ from flask import Flask
 from flask_restful import Api
 from api.utils import db, ma, migrate
 from api.controllers.v1.user import User
+from api.controllers.v1.post import Post
 
-# for initial migration only
-from api.models.user import UserModel
-from api.models.post import PostModel
 
 def init_app():
   app = Flask(__name__)
@@ -26,6 +24,7 @@ def init_app():
   api.add_resource(User, "/profile/", "/profile/<u_id>")
   app.add_url_rule("/register/", endpoint="user", methods=["POST"])
   app.add_url_rule("/login/", endpoint="user", methods=["POST"])
+  api.add_resource(Post, "/posts/", "/posts/<p_id>")
 
   app.wsgi_app = AuthMiddleware(app.wsgi_app)
 
