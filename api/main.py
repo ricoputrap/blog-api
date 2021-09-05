@@ -14,7 +14,11 @@ def init_app():
   app = Flask(__name__)
   api = Api(app)
 
-  app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+  DB_URI = os.getenv('DATABASE_URL')
+  if DB_URI.startswith("postgres://"):
+    DB_URI = DB_URI.replace("postgres://", "postgresql://", 1)
+
+  app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
   app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
   
   db.init_app(app)
