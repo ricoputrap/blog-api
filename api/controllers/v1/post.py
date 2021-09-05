@@ -21,28 +21,27 @@ class Post(Resource):
           }
         }
       else:
-        response = ""
-      #   user = self.post_service.get_user_by_id(p_id)
+        post = self.post_service.get_post_by_id(p_id)
 
-      #   if not user:
-      #     return make_response(jsonify({
-      #       'errors': {
-      #         'status': 404,
-      #         'title': 'User not found',
-      #         'detail': 'User with p_id = %s is not found' % (p_id),
-      #         'source': {
-      #           'pointer': '/profile/<p_id>',
-      #           'method': 'GET'
-      #         },
-      #       }
-      #     }), 404)
+        if not post:
+          return make_response(jsonify({
+            'errors': {
+              'status': 404,
+              'title': 'Post not found',
+              'detail': 'Post with p_id = %s is not found' % (p_id),
+              'source': {
+                'pointer': '/posts/<p_id>',
+                'method': 'GET'
+              },
+            }
+          }), 404)
         
-      #   response = {
-      #     'message': 'Get user by p_id is success!',
-      #     'data': {
-      #       'user': self.user_schema.dump(user),
-      #     }
-      #   }
+        response = {
+          'message': 'Get post by p_id is success!',
+          'data': {
+            'post': self.post_schema.dump(post),
+          }
+        }
       return response
     except Exception as e:
       return make_response(jsonify({

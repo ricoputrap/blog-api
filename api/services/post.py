@@ -8,6 +8,10 @@ class PostService:
     posts = PostModel.query.all()
     return posts
 
+  def get_post_by_id(self, p_id):
+    post = PostModel.query.filter_by(p_id=p_id).first()
+    return post
+
   def create_new_post(self, new_post_data):
     p_id = str(uuid.uuid4())
     
