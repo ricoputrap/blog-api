@@ -22,7 +22,10 @@ class AuthMiddleware:
     path = req.path.split('/')[1]
     method = req.method
 
-    if path == 'profile' and method == 'PUT':
+    is_edit_profile = path == 'profile' and method == 'PUT'
+    is_add_post = path == 'posts' and method == 'POST'
+
+    if is_edit_profile or is_add_post:
       try:
         header_auth = req.headers['Authorization']
         auth_token = header_auth.replace('Bearer ', '')

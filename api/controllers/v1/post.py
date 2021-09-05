@@ -55,66 +55,29 @@ class Post(Resource):
           }
         ]
       }), 500)
-  
-  # def post(self):
-  #   path = request.path
-  #   try:
-  #     if path == '/register/':
-  #       request_body = request.get_json()
-  #       new_user = self.user_service.create_new_user(request_body)
-  #       response = {
-  #         'data': {
-  #           'user': self.user_schema.dump(new_user),
-  #           # 'token': 'dummytoken1234'
-  #         },
-  #         'message': 'New user is successfully created!'
-  #       }
-  #       return response
-  #     elif path == '/login/':
-  #       request_body = request.get_json()
-  #       result = self.user_service.login(request_body)
-  #       if not result:
-  #         return make_response(jsonify({
-  #           'errors': [
-  #             {
-  #               "status": 401,
-  #               "source": { "pointer": "/login/", "method": "POST" },
-  #               "title": "Unauthorized",
-  #               "detail": "Wrong username or password."
-  #             }
-  #           ]
-  #         }), 401)
-        
-  #       response = {
-  #         "message": "Login successful.",
-  #         "data": {
-  #           "user": self.user_schema.dump(result['user']),
-  #           "token": result['token']
-  #         }
-  #       }
-  #       return response
-  #     else:
-  #       return make_response(jsonify({
-  #       'errors': [
-  #         {
-  #           "status": 404,
-  #           "source": { "pointer": "/profile/", "method": "POST" },
-  #           "title": "Internal Server Error",
-  #           "detail": "Accessible only through /register and /login endpoint"
-  #         }
-  #       ]
-  #     }), 404)
-  #   except Exception as e:
-  #     return make_response(jsonify({
-  #       'errors': [
-  #         {
-  #           "status": 500,
-  #           "source": { "pointer": "%s" % (path), "method": "POST" },
-  #           "title": "Internal Server Error",
-  #           "detail": str(e)
-  #         }
-  #       ]
-  #     }), 500)
+
+  def post(self):
+    try:
+      request_body = request.get_json()
+      new_post = self.post_service.create_new_post(request_body)
+      response = {
+        "message": "New post is successfully created!",
+        "data": {
+          "post": self.post_schema.dump(new_post)
+        }
+      }
+      return response
+    except Exception as e:
+      return make_response(jsonify({
+        "errors": [
+          {
+            "status": 500,
+            "source": { "pointer": "/posts/", "method": "POST" },
+            "title": "Internal Server Error",
+            "detail": str(e)
+          }
+        ]
+      }), 500)
   
   # def put(self, u_id = None):
   #   '''
