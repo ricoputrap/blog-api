@@ -122,7 +122,54 @@ class Post(Resource):
         'errors': [
           {
             "status": 500,
-            "source": { "pointer": "/posts/", "method": "PUT" },
+            "source": { "pointer": "/posts/<p_id>", "method": "PUT" },
+            "title": "Internal Server Error",
+            "detail": str(e)
+          }
+        ]
+      }), 500)
+  
+  def delete(self, p_id):
+    try:
+      if not p_id:
+        return make_response(jsonify({
+          'errors': [
+            {
+              "status": 400,
+              "source": { "pointer": "/posts/<p_id>", "method": "DELETE" },
+              "title": "Bad Request",
+              "detail": "Missing 1 required argument: 'p_id'"
+            }
+          ]
+        }), 400)
+      
+      post = self.post_service.delete_post(p_id)
+      if not post:
+        return make_response(jsonify({
+          'errors': [
+            {
+              "status": 404,
+              "source": { "pointer": "/posts/<p_id>" , "method": "DELETE" },
+              "title": "Post not found",
+              "detail": "Post with p_id = %s is not found" % (p_id)
+            }
+          ]
+        }), 404)
+      
+      response = {
+        "message": "Post with p_id = %s is successfully deleted" % (p_id),
+        "data": {
+          "title": post["p_title"]
+        }
+      }
+      return response
+
+    except Exception as e:
+      return make_response(jsonify({
+        'errors': [
+          {
+            "status": 500,
+            "source": { "pointer": "/posts/<p_id>", "method": "DELETE" },
             "title": "Internal Server Error",
             "detail": str(e)
           }

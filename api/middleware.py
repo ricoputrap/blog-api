@@ -25,7 +25,8 @@ class AuthMiddleware:
     is_edit_profile = path == 'profile' and method == 'PUT'
     is_add_post = path == 'posts' and method == 'POST'
     is_edit_post = path == 'posts' and method == 'PUT'
-    is_need_auth = is_edit_profile or is_add_post or is_edit_post
+    is_delete_post = path == 'posts' and method == 'DELETE'
+    is_need_auth = is_edit_profile or is_add_post or is_edit_post or is_delete_post
 
     if is_need_auth:
       try:

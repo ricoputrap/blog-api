@@ -57,3 +57,16 @@ class PostService:
     
     db.session.commit()
     return post
+  
+  def delete_post(self, p_id):
+    post = PostModel.query.filter_by(p_id=p_id).first()
+    if not post:
+      return None
+    
+    post_title = post.p_title
+    
+    db.session.delete(post)
+    db.session.commit()
+    return {
+      "p_title": post_title
+    }
