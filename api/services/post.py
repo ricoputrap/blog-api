@@ -34,3 +34,26 @@ class PostService:
     db.session.add(new_post)
     db.session.commit()
     return new_post
+
+  def edit_post(self, p_id, request_body):
+    post = PostModel.query.filter_by(p_id=p_id).first()
+    if not post:
+      return None
+    
+    if 'p_title' in request_body:
+      post.p_title = request_body['p_title']
+    if 'p_subtitle' in request_body:
+      post.p_subtitle = request_body['p_subtitle']
+    if 'p_content' in request_body:
+      post.p_content = request_body['p_content']
+    if 'p_cover' in request_body:
+      post.p_cover = request_body['p_cover']
+    if 'p_status' in request_body:
+      post.p_status = request_body['p_status']
+    if 'p_updated_at' in request_body:
+      post.p_updated_at = request_body['p_updated_at']
+    if 'p_published_at' in request_body:
+      post.p_published_at = request_body['p_published_at']
+    
+    db.session.commit()
+    return post

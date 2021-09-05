@@ -78,53 +78,53 @@ class Post(Resource):
         ]
       }), 500)
   
-  # def put(self, u_id = None):
-  #   '''
-  #   @TODO set error if `request_body` is empty
-  #   '''
-  #   try:
-  #     if not u_id:
-  #       return make_response(jsonify({
-  #           'errors': [
-  #             {
-  #               "status": 400,
-  #               "source": { "pointer": "/profile/<u_id>", "method": "PUT" },
-  #               "title": "Bad Request",
-  #               "detail": "Missing 1 required argument: 'u_id'"
-  #             }
-  #           ]
-  #         }), 400)
+  def put(self, p_id = None):
+    '''
+    @TODO set error if `request_body` is empty
+    '''
+    try:
+      if not p_id:
+        return make_response(jsonify({
+            'errors': [
+              {
+                "status": 400,
+                "source": { "pointer": "/posts/<p_id>", "method": "PUT" },
+                "title": "Bad Request",
+                "detail": "Missing 1 required argument: 'p_id'"
+              }
+            ]
+          }), 400)
 
-  #     request_body = request.get_json()
-  #     updated_user = self.user_service.edit_user(u_id, request_body)
+      request_body = request.get_json()
+      updated_post = self.post_service.edit_post(p_id, request_body)
 
-  #     if not updated_user:
-  #       return make_response(jsonify({
-  #           'errors': [
-  #             {
-  #               "status": 404,
-  #               "source": { "pointer": "/profile/<u_id>", "method": "PUT" },
-  #               "title": "User not found",
-  #               "detail": "User with u_id = %s is not found" % (u_id)
-  #             }
-  #           ]
-  #         }), 404)
+      if not updated_post:
+        return make_response(jsonify({
+            'errors': [
+              {
+                "status": 404,
+                "source": { "pointer": "/posts/<p_id>", "method": "PUT" },
+                "title": "Post not found",
+                "detail": "Post with p_id = %s is not found" % (p_id)
+              }
+            ]
+          }), 404)
 
-  #     response = {
-  #       'message': 'User data is successfully updated!',
-  #       'data': {
-  #         'user': self.user_schema.dump(updated_user)
-  #       }
-  #     }
-  #     return response
-  #   except Exception as e:
-  #     return make_response(jsonify({
-  #       'errors': [
-  #         {
-  #           "status": 500,
-  #           "source": { "pointer": "/profile/", "method": "PUT" },
-  #           "title": "Internal Server Error",
-  #           "detail": str(e)
-  #         }
-  #       ]
-  #     }), 500)
+      response = {
+        'message': 'Post data is successfully updated!',
+        'data': {
+          'post': self.post_schema.dump(updated_post)
+        }
+      }
+      return response
+    except Exception as e:
+      return make_response(jsonify({
+        'errors': [
+          {
+            "status": 500,
+            "source": { "pointer": "/posts/", "method": "PUT" },
+            "title": "Internal Server Error",
+            "detail": str(e)
+          }
+        ]
+      }), 500)
